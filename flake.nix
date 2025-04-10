@@ -24,6 +24,8 @@
           friendly-snippets
           chadtree
 
+          neoterm
+
           clangd_extensions-nvim
           nvim-treesitter.withAllGrammars
         ];
@@ -68,6 +70,25 @@ safe_require("plugins.rust")
 safe_require("plugins.crates")
 safe_require("plugins.clangd_extensions")
 safe_require("plugins.chadtree")
+safe_require("plugins.neoterm")
+EOF
+
+cat > $out/lua/plugins/neoterm.lua <<EOF
+
+vim.keymap.set("n", "<leader>\t", "<C-w>w")
+
+vim.g.neoterm_size = tostring(0.3 * vim.o.columns)
+vim.g.neoterm_default_mod = 'botright vertical'
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*",
+  callback = function()
+    if vim.bo.buftype == "terminal" then
+      vim.cmd("startinsert")
+    end
+  end,
+})
+
 EOF
 
 cat > $out/lua/plugins/chadtree.lua <<EOF
